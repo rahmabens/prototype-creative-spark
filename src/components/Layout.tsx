@@ -31,8 +31,7 @@ const Layout: React.FC<LayoutProps> = ({ children, currentUser, onLogout, active
 
   const getTabsForRole = (role: UserRole) => {
     const commonTabs = [
-      { id: 'dashboard', label: 'Tableau de bord' },
-      { id: 'audit', label: 'Audit & Traçabilité' }
+      { id: 'dashboard', label: 'Tableau de bord' }
     ];
 
     switch (role) {
@@ -44,12 +43,14 @@ const Layout: React.FC<LayoutProps> = ({ children, currentUser, onLogout, active
       case 'annotateur':
         return [
           ...commonTabs,
-          { id: 'annotation', label: 'Annotation & Correction' }
+          { id: 'annotation', label: 'Annotation & Correction' },
+          { id: 'audit', label: 'Audit & Traçabilité' }
         ];
       case 'expert':
         return [
           ...commonTabs,
-          { id: 'validation', label: 'Validation Finale' }
+          { id: 'validation', label: 'Validation Finale' },
+          { id: 'audit', label: 'Audit & Traçabilité' }
         ];
     }
   };

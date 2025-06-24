@@ -3,7 +3,7 @@ import React from 'react';
 import { Document, User } from '../types';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
-import { FileText, Clock, CheckCircle, AlertCircle } from 'lucide-react';
+import { FileText, Clock, CheckCircle, AlertCircle, XCircle, RefreshCw } from 'lucide-react';
 
 interface DashboardProps {
   documents: Document[];
@@ -53,11 +53,21 @@ const Dashboard: React.FC<DashboardProps> = ({ documents, currentUser }) => {
   };
 
   const getStats = () => {
-    const total = documents.length;
-    const pending = documents.filter(doc => doc.status !== 'completed').length;
+    const totalScrapped = documents.length;
+    const totalPlanned = 150; // Nombre planifié (exemple)
+    const inProgress = documents.filter(doc => doc.status !== 'completed').length;
     const completed = documents.filter(doc => doc.status === 'completed').length;
+    const rejected = 8; // Documents refusés (exemple)
+    const rescrapping = 3; // Documents en cours de rescrapping (exemple)
     
-    return { total, pending, completed };
+    return { 
+      totalScrapped, 
+      totalPlanned, 
+      inProgress, 
+      completed, 
+      rejected, 
+      rescrapping 
+    };
   };
 
   const stats = getStats();
@@ -70,8 +80,13 @@ const Dashboard: React.FC<DashboardProps> = ({ documents, currentUser }) => {
           <div className="flex items-center">
             <FileText className="h-8 w-8 text-blue-500" />
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Total Documents</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
+              <p className="text-sm font-medium text-gray-600">Documents Scrappés / Planifiés</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {stats.totalScrapped} / {stats.totalPlanned}
+              </p>
+              <p className="text-xs text-gray-500">
+                {Math.round((stats.totalScrapped / stats.totalPlanned) * 100)}% réalisé
+              </p>
             </div>
           </div>
         </Card>
@@ -80,8 +95,13 @@ const Dashboard: React.FC<DashboardProps> = ({ documents, currentUser }) => {
           <div className="flex items-center">
             <Clock className="h-8 w-8 text-yellow-500" />
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">En cours</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.pending}</p>
+              <p className="text-sm font-medium text-gray-600">En cours / Total</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {stats.inProgress} / {stats.totalScrapped}
+              </p>
+              <p className="text-xs text-gray-500">
+                {Math.round((stats.inProgress / stats.totalScrapped) * 100)}% en cours
+              </p>
             </div>
           </div>
         </Card>
@@ -90,8 +110,35 @@ const Dashboard: React.FC<DashboardProps> = ({ documents, currentUser }) => {
           <div className="flex items-center">
             <CheckCircle className="h-8 w-8 text-green-500" />
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Terminés</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.completed}</p>
+              <p className="text-sm font-medium text-gray-600">Terminés / Total</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {stats.completed} / {stats.totalScrapped}
+              </p>
+              <p className="text-xs text-gray-500">
+                {Math.round((stats.completed / stats.totalScrapped) * 100)}% terminé
+              </p>
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card className="p-6">
+          <div className="flex items-center">
+            <XCircle className="h-8 w-8 text-red-500" />
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Documents Refusés</p>
+              <p className="text-2xl font-bold text-gray-900">{stats.rejected}</p>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="p-6">
+          <div className="flex items-center">
+            <RefreshCw className="h-8 w-8 text-orange-500" />
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">En cours de Rescrapping</p>
+              <p className="text-2xl font-bold text-gray-900">{stats.rescrapping}</p>
             </div>
           </div>
         </Card>

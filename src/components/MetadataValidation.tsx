@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Document } from '../types';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
@@ -7,7 +6,7 @@ import { Input } from './ui/input';
 import { Badge } from './ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Progress } from './ui/progress';
-import { RefreshCw, Eye, Save, Calendar } from 'lucide-react';
+import { RefreshCw, Eye, Save, Calendar, Clock, User } from 'lucide-react';
 
 interface MetadataValidationProps {
   documents: Document[];
@@ -58,6 +57,14 @@ const MetadataValidation: React.FC<MetadataValidationProps> = ({ documents, curr
       version: '',
       sourceUrl: 'https://www.ema.europa.eu/en/documents/ot'
     });
+  };
+
+  const getActionColor = (action: string) => {
+    if (action.includes('uploadé')) return 'bg-blue-100 text-blue-800';
+    if (action.includes('extraites') || action.includes('Extraction')) return 'bg-yellow-100 text-yellow-800';
+    if (action.includes('validées') || action.includes('Validation')) return 'bg-green-100 text-green-800';
+    if (action.includes('corrigées') || action.includes('Correction')) return 'bg-orange-100 text-orange-800';
+    return 'bg-gray-100 text-gray-800';
   };
 
   return (
@@ -238,6 +245,64 @@ const MetadataValidation: React.FC<MetadataValidationProps> = ({ documents, curr
                     <Save className="w-4 h-4 mr-2" />
                     Sauvegarder
                   </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Audit Trail Section */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Clock className="w-5 h-5 mr-2 text-blue-500" />
+                  Audit Trail & Traçabilité
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {selectedDoc.auditTrail.map((entry) => (
+                    <div key={entry.id} className="border rounded-lg p-4 hover:bg-gray-50">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-2 mb-2">
+                            <Badge className={getActionColor(entry.action)}>
+                              {entry.action}
+                            </Badge>
+                            <span className="text-sm font-medium">Version V{entry.id.split('-')[1] || '0'}</span>
+                          </div>
+                          
+                          <p className="text-gray-800 mb-2">{entry.details}</p>
+                          
+                          <div className="flex items-center space-x-4 text-sm text-gray-600">
+                            <div className="flex items-center space-x-1">
+                              <User className="h-4 w-4" />
+                              <span>{entry.userName}</span>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <Clock className="h-4 w-4" />
+                              <span>{new Date(entry.timestamp).toLocaleString('fr-FR')}</span>
+                            </div>
+                          </div>
+
+                          {(entry.previousValue || entry.newValue) && (
+                            <div className="mt-3 p-3 bg-gray-50 rounded text-sm">
+                              {entry.previousValue && (
+                                <div className="mb-2">
+                                  <span className="font-medium text-red-600">Avant: </span>
+                                  <span className="text-gray-700">{JSON.stringify(entry.previousValue)}</span>
+                                </div>
+                              )}
+                              {entry.newValue && (
+                                <div>
+                                  <span className="font-medium text-green-600">Après: </span>
+                                  <span className="text-gray-700">{JSON.stringify(entry.newValue)}</span>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </CardContent>
             </Card>
