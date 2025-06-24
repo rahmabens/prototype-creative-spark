@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Document } from '../types';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
@@ -6,7 +7,7 @@ import { Input } from './ui/input';
 import { Badge } from './ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Progress } from './ui/progress';
-import { RefreshCw, Eye, Save, Calendar, Clock, User } from 'lucide-react';
+import { RefreshCw, Eye, Save, Calendar, Clock, User, FileText } from 'lucide-react';
 
 interface MetadataValidationProps {
   documents: Document[];
@@ -20,6 +21,7 @@ const MetadataValidation: React.FC<MetadataValidationProps> = ({ documents, curr
   const metadataFields = [
     { key: 'title', label: 'Titre du document', confidence: 98, autoExtracted: true },
     { key: 'documentType', label: 'Type de document', confidence: 70, autoExtracted: false },
+    { key: 'documentContext', label: 'Contexte du document', confidence: 85, autoExtracted: false },
     { key: 'language', label: 'Langue', confidence: 90, autoExtracted: false },
     { key: 'publicationDate', label: 'Date de publication', confidence: 100, autoExtracted: true },
     { key: 'source', label: 'Source', confidence: 95, autoExtracted: true },
@@ -51,6 +53,7 @@ const MetadataValidation: React.FC<MetadataValidationProps> = ({ documents, curr
     setFormData({
       title: 'Registration guide for UI and API users',
       documentType: 'Guideline',
+      documentContext: 'Réglementation pharmaceutique',
       language: 'Anglais',
       publicationDate: '06/05/2025',
       source: 'EMA',
@@ -117,6 +120,10 @@ const MetadataValidation: React.FC<MetadataValidationProps> = ({ documents, curr
                     <Eye className="w-4 h-4 mr-2" />
                     Voir le document
                   </Button>
+                  <Button variant="outline" size="sm">
+                    <FileText className="w-4 h-4 mr-2" />
+                    Métadonnées
+                  </Button>
                 </div>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -156,6 +163,26 @@ const MetadataValidation: React.FC<MetadataValidationProps> = ({ documents, curr
 
                     <div>
                       <label className="block text-sm font-medium mb-2">
+                        Contexte du document
+                        <Badge className="ml-2 bg-yellow-100 text-yellow-800">Auto-détecté</Badge>
+                      </label>
+                      <Select value={formData.documentContext} onValueChange={(value) => setFormData({...formData, documentContext: value})}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Réglementation pharmaceutique">Réglementation pharmaceutique</SelectItem>
+                          <SelectItem value="Contrat commercial">Contrat commercial</SelectItem>
+                          <SelectItem value="Documentation technique">Documentation technique</SelectItem>
+                          <SelectItem value="Rapport d'étude">Rapport d'étude</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">
                         Langue
                         <Badge className="ml-2 bg-green-100 text-green-800">Auto-détecté</Badge>
                       </label>
@@ -174,9 +201,7 @@ const MetadataValidation: React.FC<MetadataValidationProps> = ({ documents, curr
                         Détecté automatiquement: en
                       </p>
                     </div>
-                  </div>
 
-                  <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium mb-2">
                         Date de publication
@@ -194,7 +219,9 @@ const MetadataValidation: React.FC<MetadataValidationProps> = ({ documents, curr
                         Extrait automatiquement: 2025-05-06
                       </p>
                     </div>
+                  </div>
 
+                  <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium mb-2">Version</label>
                       <Input 
@@ -202,9 +229,7 @@ const MetadataValidation: React.FC<MetadataValidationProps> = ({ documents, curr
                         onChange={(e) => setFormData({...formData, version: e.target.value})}
                       />
                     </div>
-                  </div>
 
-                  <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium mb-2">
                         Source
@@ -225,14 +250,14 @@ const MetadataValidation: React.FC<MetadataValidationProps> = ({ documents, curr
                         Extrait automatiquement: EMA
                       </p>
                     </div>
+                  </div>
 
-                    <div>
-                      <label className="block text-sm font-medium mb-2">URL source</label>
-                      <Input 
-                        value={formData.sourceUrl || ''} 
-                        onChange={(e) => setFormData({...formData, sourceUrl: e.target.value})}
-                      />
-                    </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">URL source</label>
+                    <Input 
+                      value={formData.sourceUrl || ''} 
+                      onChange={(e) => setFormData({...formData, sourceUrl: e.target.value})}
+                    />
                   </div>
                 </div>
 

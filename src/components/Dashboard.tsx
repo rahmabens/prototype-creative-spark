@@ -3,7 +3,8 @@ import React from 'react';
 import { Document, User } from '../types';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
-import { FileText, Clock, CheckCircle, AlertCircle, XCircle, RefreshCw } from 'lucide-react';
+import { FileText, Clock, CheckCircle, AlertCircle, XCircle, RefreshCw, BarChart3 } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 interface DashboardProps {
   documents: Document[];
@@ -33,25 +34,6 @@ const Dashboard: React.FC<DashboardProps> = ({ documents, currentUser }) => {
     }
   };
 
-  const getDocumentsForRole = () => {
-    switch (currentUser.role) {
-      case 'metadonneur':
-        return documents.filter(doc => 
-          doc.status === 'metadata_extracted' || doc.status === 'metadata_validated'
-        );
-      case 'annotateur':
-        return documents.filter(doc => 
-          doc.status === 'metadata_validated' || doc.status === 'annotated'
-        );
-      case 'expert':
-        return documents.filter(doc => 
-          doc.status === 'annotated' || doc.status === 'expert_validated'
-        );
-      default:
-        return documents;
-    }
-  };
-
   const getStats = () => {
     const totalScrapped = documents.length;
     const totalPlanned = 150; // Nombre planifié (exemple)
@@ -71,7 +53,28 @@ const Dashboard: React.FC<DashboardProps> = ({ documents, currentUser }) => {
   };
 
   const stats = getStats();
-  const relevantDocs = getDocumentsForRole();
+
+  // Données pour l'histogramme des KPIs
+  const kpiData = [
+    {
+      name: 'Documents',
+      scrapped: stats.totalScrapped,
+      planned: stats.totalPlanned,
+      completed: stats.completed,
+      inProgress: stats.inProgress
+    }
+  ];
+
+  // Données pour l'histogramme des tâches assignées
+  const taskData = [
+    { name: 'Extraction', value: 15, color: '#8884d8' },
+    { name: 'Validation', value: 8, color: '#82ca9d' },
+    { name: 'Annotation', value: 12, color: '#ffc658' },
+    { name: 'Correction', value: 5, color: '#ff7300' },
+    { name: 'Finalisation', value: 3, color: '#00ff00' }
+  ];
+
+  const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff7300', '#00ff00'];
 
   return (
     <div className="space-y-6">
@@ -144,48 +147,61 @@ const Dashboard: React.FC<DashboardProps> = ({ documents, currentUser }) => {
         </Card>
       </div>
 
-      <Card className="p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">
-          Documents nécessitant votre attention
-        </h2>
-        
-        {relevantDocs.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
-            <AlertCircle className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-            <p>Aucun document ne nécessite votre attention pour le moment.</p>
+      {/* Histogramme des KPIs et Tâches Assignées */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card className="p-6">
+          <div className="flex items-center mb-4">
+            <BarChart3 className="h-6 w-6 text-blue-500 mr-2" />
+            <h2 className="text-lg font-semibold text-gray-900">
+              KPIs des Documents
+            </h2>
           </div>
-        ) : (
-          <div className="space-y-4">
-            {relevantDocs.map((doc) => (
-              <div key={doc.id} className="border rounded-lg p-4 hover:bg-gray-50">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <h3 className="font-medium text-gray-900">{doc.filename}</h3>
-                    <p className="text-sm text-gray-600 mt-1">
-                      Uploadé le {new Date(doc.uploadDate).toLocaleDateString('fr-FR')}
-                    </p>
-                    {doc.metadata.title && (
-                      <p className="text-sm text-gray-800 mt-1">
-                        Titre: {doc.metadata.title}
-                      </p>
-                    )}
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Badge className={getStatusColor(doc.status)}>
-                      {getStatusLabel(doc.status)}
-                    </Badge>
-                    {doc.metadata.extractionConfidence && (
-                      <Badge variant="outline">
-                        Confiance: {Math.round(doc.metadata.extractionConfidence * 100)}%
-                      </Badge>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={kpiData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="planned" fill="#e5e7eb" name="Planifiés" />
+                <Bar dataKey="scrapped" fill="#3b82f6" name="Scrappés" />
+                <Bar dataKey="completed" fill="#10b981" name="Terminés" />
+                <Bar dataKey="inProgress" fill="#f59e0b" name="En cours" />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
-        )}
-      </Card>
+        </Card>
+
+        <Card className="p-6">
+          <div className="flex items-center mb-4">
+            <BarChart3 className="h-6 w-6 text-green-500 mr-2" />
+            <h2 className="text-lg font-semibold text-gray-900">
+              Tâches Assignées
+            </h2>
+          </div>
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={taskData}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={({ name, value }) => `${name}: ${value}`}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="value"
+                >
+                  {taskData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </Card>
+      </div>
     </div>
   );
 };
