@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { User } from '../types';
 import { mockDocuments } from '../data/mockData';
@@ -6,6 +5,8 @@ import LoginForm from '../components/LoginForm';
 import Layout from '../components/Layout';
 import Dashboard from '../components/Dashboard';
 import AuditTrail from '../components/AuditTrail';
+import MetadataValidation from '../components/MetadataValidation';
+import AnnotationDashboard from '../components/AnnotationDashboard';
 
 const Index = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -32,19 +33,9 @@ const Index = () => {
       case 'audit':
         return <AuditTrail documents={mockDocuments} />;
       case 'metadata':
-        return (
-          <div className="text-center py-8">
-            <h2 className="text-xl font-semibold mb-4">Module de validation des métadonnées</h2>
-            <p className="text-gray-600">Interface spécialisée pour les métadonneurs - En développement</p>
-          </div>
-        );
+        return <MetadataValidation documents={mockDocuments} currentUser={currentUser} />;
       case 'annotation':
-        return (
-          <div className="text-center py-8">
-            <h2 className="text-xl font-semibold mb-4">Module d'annotation et correction</h2>
-            <p className="text-gray-600">Interface spécialisée pour les annotateurs - En développement</p>
-          </div>
-        );
+        return <AnnotationDashboard documents={mockDocuments} currentUser={currentUser} />;
       case 'validation':
         return (
           <div className="text-center py-8">
