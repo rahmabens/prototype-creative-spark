@@ -7,7 +7,7 @@ import { Input } from './ui/input';
 import { Badge } from './ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Progress } from './ui/progress';
-import { RefreshCw, Eye, Save, Calendar, Clock, User, FileText } from 'lucide-react';
+import { RefreshCw, Eye, Save, Calendar, Clock, User, Plus, X } from 'lucide-react';
 
 interface MetadataValidationProps {
   documents: Document[];
@@ -20,8 +20,8 @@ const MetadataValidation: React.FC<MetadataValidationProps> = ({ documents, curr
 
   const metadataFields = [
     { key: 'title', label: 'Titre du document', confidence: 98, autoExtracted: true },
-    { key: 'documentType', label: 'Type de document', confidence: 70, autoExtracted: false },
-    { key: 'documentContext', label: 'Contexte du document', confidence: 85, autoExtracted: false },
+    { key: 'documentType', label: 'Type de document', confidence: 85, autoExtracted: true },
+    { key: 'documentContext', label: 'Contexte du document', confidence: 80, autoExtracted: true },
     { key: 'language', label: 'Langue', confidence: 90, autoExtracted: false },
     { key: 'publicationDate', label: 'Date de publication', confidence: 100, autoExtracted: true },
     { key: 'source', label: 'Source', confidence: 95, autoExtracted: true },
@@ -31,9 +31,11 @@ const MetadataValidation: React.FC<MetadataValidationProps> = ({ documents, curr
 
   const extractedFields = [
     { label: 'Title', value: 'Registration guide for UI and...', color: 'bg-blue-500' },
+    { label: 'Type', value: 'Guideline', color: 'bg-purple-500' },
+    { label: 'Contexte', value: 'Réglementation pharmaceutique', color: 'bg-indigo-500' },
     { label: 'Date', value: '06/05/2025', color: 'bg-green-500' },
     { label: 'Language', value: 'EN', color: 'bg-cyan-500' },
-    { label: 'Country', value: 'EU', color: 'bg-purple-500' },
+    { label: 'Country', value: 'EU', color: 'bg-emerald-500' },
     { label: 'Source', value: 'EMA', color: 'bg-orange-500' },
     { label: 'Version', value: '', color: 'bg-gray-500' }
   ];
@@ -117,11 +119,15 @@ const MetadataValidation: React.FC<MetadataValidationProps> = ({ documents, curr
                     Réextraire
                   </Button>
                   <Button variant="outline" size="sm">
+                    <X className="w-4 h-4 mr-2" />
+                    Refuser
+                  </Button>
+                  <Button variant="outline" size="sm">
                     <Eye className="w-4 h-4 mr-2" />
                     Voir le document
                   </Button>
                   <Button variant="outline" size="sm">
-                    <FileText className="w-4 h-4 mr-2" />
+                    <Plus className="w-4 h-4 mr-2" />
                     Métadonnées
                   </Button>
                 </div>
@@ -274,7 +280,7 @@ const MetadataValidation: React.FC<MetadataValidationProps> = ({ documents, curr
               </CardContent>
             </Card>
 
-            {/* Audit Trail Section */}
+            {/* Audit Trail Section intégrée */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center">
@@ -390,6 +396,18 @@ const MetadataValidation: React.FC<MetadataValidationProps> = ({ documents, curr
                   <div className="flex justify-between">
                     <span className="font-medium">Titre:</span>
                     <span>Registration guide for UI and...</span>
+                  </div>
+                </div>
+                <div className="text-sm">
+                  <div className="flex justify-between">
+                    <span className="font-medium">Type:</span>
+                    <span>Guideline</span>
+                  </div>
+                </div>
+                <div className="text-sm">
+                  <div className="flex justify-between">
+                    <span className="font-medium">Contexte:</span>
+                    <span>Réglementation pharmaceutique</span>
                   </div>
                 </div>
                 <div className="text-sm">

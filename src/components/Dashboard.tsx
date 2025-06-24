@@ -12,32 +12,11 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ documents, currentUser }) => {
-  const getStatusColor = (status: Document['status']) => {
-    switch (status) {
-      case 'uploaded': return 'bg-gray-100 text-gray-800';
-      case 'metadata_extracted': return 'bg-yellow-100 text-yellow-800';
-      case 'metadata_validated': return 'bg-blue-100 text-blue-800';
-      case 'annotated': return 'bg-green-100 text-green-800';
-      case 'expert_validated': return 'bg-purple-100 text-purple-800';
-      case 'completed': return 'bg-green-100 text-green-800';
-    }
-  };
-
-  const getStatusLabel = (status: Document['status']) => {
-    switch (status) {
-      case 'uploaded': return 'Uploadé';
-      case 'metadata_extracted': return 'Métadonnées extraites';
-      case 'metadata_validated': return 'Métadonnées validées';
-      case 'annotated': return 'Annoté';
-      case 'expert_validated': return 'Validé par expert';
-      case 'completed': return 'Terminé';
-    }
-  };
-
   const getStats = () => {
     const totalScrapped = documents.length;
     const totalPlanned = 150; // Nombre planifié (exemple)
-    const inProgress = documents.filter(doc => doc.status !== 'completed').length;
+    const totalInReextraction = 25; // Total de documents mis en réextraction
+    const inProgress = 12; // Documents actuellement en cours de scrapping par rapport au total en réextraction
     const completed = documents.filter(doc => doc.status === 'completed').length;
     const rejected = 8; // Documents refusés (exemple)
     const rescrapping = 3; // Documents en cours de rescrapping (exemple)
@@ -48,40 +27,41 @@ const Dashboard: React.FC<DashboardProps> = ({ documents, currentUser }) => {
       inProgress, 
       completed, 
       rejected, 
-      rescrapping 
+      rescrapping,
+      totalInReextraction
     };
   };
 
   const stats = getStats();
 
-  // Données pour l'histogramme des KPIs
+  // Données pour l'histogramme des KPIs avec couleurs professionnelles
   const kpiData = [
     {
       name: 'Documents',
-      scrapped: stats.totalScrapped,
-      planned: stats.totalPlanned,
-      completed: stats.completed,
-      inProgress: stats.inProgress
+      'Planifiés': stats.totalPlanned,
+      'Scrappés': stats.totalScrapped,
+      'Terminés': stats.completed,
+      'En cours': stats.inProgress
     }
   ];
 
-  // Données pour l'histogramme des tâches assignées
+  // Données pour l'histogramme des tâches assignées avec couleurs professionnelles
   const taskData = [
-    { name: 'Extraction', value: 15, color: '#8884d8' },
-    { name: 'Validation', value: 8, color: '#82ca9d' },
-    { name: 'Annotation', value: 12, color: '#ffc658' },
-    { name: 'Correction', value: 5, color: '#ff7300' },
-    { name: 'Finalisation', value: 3, color: '#00ff00' }
+    { name: 'Extraction', value: 15, color: '#3B82F6' }, // Bleu professionnel
+    { name: 'Validation', value: 8, color: '#10B981' }, // Vert émeraude
+    { name: 'Annotation', value: 12, color: '#F59E0B' }, // Orange ambré
+    { name: 'Correction', value: 5, color: '#EF4444' }, // Rouge coral
+    { name: 'Finalisation', value: 3, color: '#8B5CF6' } // Violet
   ];
 
-  const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff7300', '#00ff00'];
+  const TASK_COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
 
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="p-6">
           <div className="flex items-center">
-            <FileText className="h-8 w-8 text-blue-500" />
+            <FileText className="h-8 w-8 text-blue-600" />
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Documents Scrappés / Planifiés</p>
               <p className="text-2xl font-bold text-gray-900">
@@ -96,14 +76,14 @@ const Dashboard: React.FC<DashboardProps> = ({ documents, currentUser }) => {
 
         <Card className="p-6">
           <div className="flex items-center">
-            <Clock className="h-8 w-8 text-yellow-500" />
+            <Clock className="h-8 w-8 text-amber-500" />
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">En cours / Total</p>
+              <p className="text-sm font-medium text-gray-600">En cours / Total en réextraction</p>
               <p className="text-2xl font-bold text-gray-900">
-                {stats.inProgress} / {stats.totalScrapped}
+                {stats.inProgress} / {stats.totalInReextraction}
               </p>
               <p className="text-xs text-gray-500">
-                {Math.round((stats.inProgress / stats.totalScrapped) * 100)}% en cours
+                {Math.round((stats.inProgress / stats.totalInReextraction) * 100)}% en cours
               </p>
             </div>
           </div>
@@ -111,9 +91,9 @@ const Dashboard: React.FC<DashboardProps> = ({ documents, currentUser }) => {
 
         <Card className="p-6">
           <div className="flex items-center">
-            <CheckCircle className="h-8 w-8 text-green-500" />
+            <CheckCircle className="h-8 w-8 text-emerald-500" />
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Terminés / Total</p>
+              <p className="text-sm font-medium text-gray-600">Terminés / Total scrappé</p>
               <p className="text-2xl font-bold text-gray-900">
                 {stats.completed} / {stats.totalScrapped}
               </p>
@@ -138,7 +118,7 @@ const Dashboard: React.FC<DashboardProps> = ({ documents, currentUser }) => {
 
         <Card className="p-6">
           <div className="flex items-center">
-            <RefreshCw className="h-8 w-8 text-orange-500" />
+            <RefreshCw className="h-8 w-8 text-indigo-500" />
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">En cours de Rescrapping</p>
               <p className="text-2xl font-bold text-gray-900">{stats.rescrapping}</p>
@@ -147,39 +127,53 @@ const Dashboard: React.FC<DashboardProps> = ({ documents, currentUser }) => {
         </Card>
       </div>
 
-      {/* Histogramme des KPIs et Tâches Assignées */}
+      {/* Histogrammes avec couleurs professionnelles */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="p-6">
-          <div className="flex items-center mb-4">
-            <BarChart3 className="h-6 w-6 text-blue-500 mr-2" />
+          <div className="flex items-center mb-6">
+            <BarChart3 className="h-6 w-6 text-blue-600 mr-2" />
             <h2 className="text-lg font-semibold text-gray-900">
               KPIs des Documents
             </h2>
           </div>
-          <div className="h-64">
+          <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={kpiData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="planned" fill="#e5e7eb" name="Planifiés" />
-                <Bar dataKey="scrapped" fill="#3b82f6" name="Scrappés" />
-                <Bar dataKey="completed" fill="#10b981" name="Terminés" />
-                <Bar dataKey="inProgress" fill="#f59e0b" name="En cours" />
+              <BarChart data={kpiData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                <XAxis 
+                  dataKey="name" 
+                  tick={{ fontSize: 12, fill: '#6B7280' }}
+                  axisLine={{ stroke: '#D1D5DB' }}
+                />
+                <YAxis 
+                  tick={{ fontSize: 12, fill: '#6B7280' }}
+                  axisLine={{ stroke: '#D1D5DB' }}
+                />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: '#FFFFFF', 
+                    border: '1px solid #E5E7EB',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                  }}
+                />
+                <Bar dataKey="Planifiés" fill="#E5E7EB" name="Planifiés" radius={[2, 2, 0, 0]} />
+                <Bar dataKey="Scrappés" fill="#3B82F6" name="Scrappés" radius={[2, 2, 0, 0]} />
+                <Bar dataKey="Terminés" fill="#10B981" name="Terminés" radius={[2, 2, 0, 0]} />
+                <Bar dataKey="En cours" fill="#F59E0B" name="En cours" radius={[2, 2, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </Card>
 
         <Card className="p-6">
-          <div className="flex items-center mb-4">
-            <BarChart3 className="h-6 w-6 text-green-500 mr-2" />
+          <div className="flex items-center mb-6">
+            <BarChart3 className="h-6 w-6 text-emerald-600 mr-2" />
             <h2 className="text-lg font-semibold text-gray-900">
               Tâches Assignées
             </h2>
           </div>
-          <div className="h-64">
+          <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -187,16 +181,25 @@ const Dashboard: React.FC<DashboardProps> = ({ documents, currentUser }) => {
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={({ name, value }) => `${name}: ${value}`}
-                  outerRadius={80}
+                  label={({ name, value, percent }) => `${name}: ${value} (${(percent * 100).toFixed(0)}%)`}
+                  outerRadius={100}
                   fill="#8884d8"
                   dataKey="value"
+                  stroke="#FFFFFF"
+                  strokeWidth={2}
                 >
                   {taskData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    <Cell key={`cell-${index}`} fill={TASK_COLORS[index % TASK_COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: '#FFFFFF', 
+                    border: '1px solid #E5E7EB',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                  }}
+                />
               </PieChart>
             </ResponsiveContainer>
           </div>
