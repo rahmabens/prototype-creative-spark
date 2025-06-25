@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Document } from '../types';
@@ -176,50 +177,6 @@ const ExpertDashboard: React.FC<ExpertDashboardProps> = ({ documents, currentUse
       </Card>
     </div>
   );
-
-  function getContextBadge(category: string) {
-    switch (category) {
-      case 'Guideline':
-        return <Badge className="bg-cyan-100 text-cyan-800">Pharmaceutique</Badge>;
-      case 'Rapport interne':
-        return <Badge className="bg-purple-100 text-purple-800">Technique</Badge>;
-      case 'Image':
-        return <Badge className="bg-green-100 text-green-800">Biologie</Badge>;
-      default:
-        return <Badge className="bg-gray-100 text-gray-800">Général</Badge>;
-    }
-  }
-
-  function getFileTypeBadge(filename: string) {
-    const extension = filename.split('.').pop()?.toUpperCase();
-    return (
-      <div className="flex items-center space-x-1">
-        <Badge variant="outline" className="bg-gray-100">
-          {extension}
-        </Badge>
-        <Badge variant="outline" className="text-blue-600">
-          📎 URL
-        </Badge>
-      </div>
-    );
-  }
-
-  function handleViewDocument(doc: Document) {
-    navigate(`/expert?docId=${doc.id}`);
-  }
-
-  function toggleAuditTrail(docId: string) {
-    setShowAuditTrail(prev => ({
-      ...prev,
-      [docId]: !prev[docId]
-    }));
-  }
-
-  function getRecentAuditEntries(doc: Document) {
-    return doc.auditTrail.slice(0, 3).sort((a, b) => 
-      new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-    );
-  }
 };
 
 export default ExpertDashboard;

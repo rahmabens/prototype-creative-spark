@@ -38,7 +38,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
           <div className="flex justify-between items-center py-6">
             <div className="flex items-center">
               <h1 className="text-2xl font-bold text-gray-900">
-                DocuFlow
+                StarsINK_Internal
               </h1>
             </div>
             <nav className="hidden md:flex space-x-8">
@@ -194,7 +194,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8">
             <div className="col-span-2">
-              <h3 className="text-xl font-bold mb-4">DocuFlow</h3>
+              <h3 className="text-xl font-bold mb-4">StarsINK_Internal</h3>
               <p className="text-gray-300">
                 Solution complète pour l'extraction et la validation automatisée de documents
               </p>
@@ -217,7 +217,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-300">
-            <p>&copy; 2024 DocuFlow. Tous droits réservés.</p>
+            <p>&copy; 2024 StarsINK_Internal. Tous droits réservés.</p>
           </div>
         </div>
       </footer>
