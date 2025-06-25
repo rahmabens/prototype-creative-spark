@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Document, User } from '../types';
 import { Card } from './ui/card';
@@ -14,21 +15,40 @@ const Dashboard: React.FC<DashboardProps> = ({ documents, currentUser }) => {
   const getStats = () => {
     const totalScrapped = documents.length;
     const totalPlanned = 150; // Nombre planifié (exemple)
-    const totalInReextraction = 25; // Total de documents mis en réextraction
-    const inProgress = 12; // Documents actuellement en cours de scrapping par rapport au total en réextraction
-    const completed = documents.filter(doc => doc.status === 'completed').length;
-    const rejected = 8; // Documents refusés (exemple)
-    const rescrapping = 3; // Documents en cours de rescrapping par rapport au total à réextraire
     
-    return { 
-      totalScrapped, 
-      totalPlanned, 
-      inProgress, 
-      completed, 
-      rejected, 
-      rescrapping,
-      totalInReextraction
-    };
+    if (currentUser.role === 'annotateur') {
+      const totalInReannotation = 25; // Total de documents mis en réannotation
+      const inProgress = 12; // Documents actuellement en cours d'annotation par rapport au total en réannotation
+      const completed = documents.filter(doc => doc.status === 'completed').length;
+      const rejected = 8; // Documents refusés (exemple)
+      const reannotating = 3; // Documents en cours de réannotation par rapport au total à ré-annoter
+      
+      return { 
+        totalScrapped, 
+        totalPlanned, 
+        inProgress, 
+        completed, 
+        rejected, 
+        reannotating,
+        totalInReannotation
+      };
+    } else {
+      const totalInReextraction = 25; // Total de documents mis en réextraction
+      const inProgress = 12; // Documents actuellement en cours de scrapping par rapport au total en réextraction
+      const completed = documents.filter(doc => doc.status === 'completed').length;
+      const rejected = 8; // Documents refusés (exemple)
+      const rescrapping = 3; // Documents en cours de rescrapping par rapport au total à réextraire
+      
+      return { 
+        totalScrapped, 
+        totalPlanned, 
+        inProgress, 
+        completed, 
+        rejected, 
+        rescrapping,
+        totalInReextraction
+      };
+    }
   };
 
   const stats = getStats();
@@ -52,8 +72,6 @@ const Dashboard: React.FC<DashboardProps> = ({ documents, currentUser }) => {
     { name: 'Correction', value: 5, color: '#FF6B35' }, // Orange IA
     { name: 'Finalisation', value: 3, color: '#00BCD4' } // Cyan IA
   ];
-
-  const TASK_COLORS = ['#E91E63', '#9C27B0', '#2196F3', '#FF6B35', '#00BCD4'];
 
   return (
     <div className="space-y-6">
@@ -79,12 +97,14 @@ const Dashboard: React.FC<DashboardProps> = ({ documents, currentUser }) => {
           <div className="flex items-center">
             <Clock className="h-8 w-8 text-purple-600" />
             <div className="ml-4">
-              <p className="text-sm font-medium text-purple-800">En cours / Total en réextraction</p>
+              <p className="text-sm font-medium text-purple-800">
+                En cours / Total en {currentUser.role === 'annotateur' ? 'réannotation' : 'réextraction'}
+              </p>
               <p className="text-2xl font-bold text-purple-900">
-                {stats.inProgress} / {stats.totalInReextraction}
+                {stats.inProgress} / {currentUser.role === 'annotateur' ? (stats as any).totalInReannotation : (stats as any).totalInReextraction}
               </p>
               <p className="text-xs text-purple-600">
-                {Math.round((stats.inProgress / stats.totalInReextraction) * 100)}% en cours
+                {Math.round((stats.inProgress / (currentUser.role === 'annotateur' ? (stats as any).totalInReannotation : (stats as any).totalInReextraction)) * 100)}% en cours
               </p>
             </div>
           </div>
@@ -94,7 +114,9 @@ const Dashboard: React.FC<DashboardProps> = ({ documents, currentUser }) => {
           <div className="flex items-center">
             <CheckCircle className="h-8 w-8 text-emerald-600" />
             <div className="ml-4">
-              <p className="text-sm font-medium text-emerald-800">Terminés / Total scrappé</p>
+              <p className="text-sm font-medium text-emerald-800">
+                Terminés / Total {currentUser.role === 'annotateur' ? 'à annoter' : 'scrappé'}
+              </p>
               <p className="text-2xl font-bold text-emerald-900">
                 {stats.completed} / {stats.totalScrapped}
               </p>
@@ -121,10 +143,14 @@ const Dashboard: React.FC<DashboardProps> = ({ documents, currentUser }) => {
           <div className="flex items-center">
             <RefreshCw className="h-8 w-8 text-cyan-600" />
             <div className="ml-4">
-              <p className="text-sm font-medium text-cyan-800">Rescrapping / Total à réextraire</p>
-              <p className="text-2xl font-bold text-cyan-900">{stats.rescrapping} / {stats.totalInReextraction}</p>
+              <p className="text-sm font-medium text-cyan-800">
+                {currentUser.role === 'annotateur' ? 'Réannotation' : 'Rescrapping'} / Total à {currentUser.role === 'annotateur' ? 'ré-annoter' : 'réextraire'}
+              </p>
+              <p className="text-2xl font-bold text-cyan-900">
+                {currentUser.role === 'annotateur' ? (stats as any).reannotating : (stats as any).rescrapping} / {currentUser.role === 'annotateur' ? (stats as any).totalInReannotation : (stats as any).totalInReextraction}
+              </p>
               <p className="text-xs text-cyan-600">
-                {Math.round((stats.rescrapping / stats.totalInReextraction) * 100)}% en rescrapping
+                {Math.round(((currentUser.role === 'annotateur' ? (stats as any).reannotating : (stats as any).rescrapping) / (currentUser.role === 'annotateur' ? (stats as any).totalInReannotation : (stats as any).totalInReextraction)) * 100)}% en {currentUser.role === 'annotateur' ? 'réannotation' : 'rescrapping'}
               </p>
             </div>
           </div>
