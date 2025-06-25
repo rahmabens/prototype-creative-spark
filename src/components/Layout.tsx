@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { User, UserRole } from '../types';
 import { Button } from './ui/button';
@@ -43,8 +42,7 @@ const Layout: React.FC<LayoutProps> = ({ children, currentUser, onLogout, active
       case 'annotateur':
         return [
           ...commonTabs,
-          { id: 'annotation', label: 'Annotation & Correction' },
-          { id: 'audit', label: 'Audit & Traçabilité' }
+          { id: 'annotation', label: 'Annotation & Correction' }
         ];
       case 'expert':
         return [
