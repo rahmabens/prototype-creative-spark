@@ -1,7 +1,8 @@
+
 import React, { useState } from 'react';
 import { User } from '../types';
 import { mockDocuments } from '../data/mockData';
-import LoginForm from '../components/LoginForm';
+import LandingPage from '../components/LandingPage';
 import Layout from '../components/Layout';
 import Dashboard from '../components/Dashboard';
 import AuditTrail from '../components/AuditTrail';
@@ -23,7 +24,7 @@ const Index = () => {
   };
 
   if (!currentUser) {
-    return <LoginForm onLogin={handleLogin} />;
+    return <LandingPage onLogin={handleLogin} />;
   }
 
   const renderTabContent = () => {
