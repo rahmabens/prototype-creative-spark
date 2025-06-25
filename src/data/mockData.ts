@@ -10,15 +10,15 @@ export const mockUsers: User[] = [
 export const mockDocuments: Document[] = [
   {
     id: 'doc-001',
-    filename: 'contrat_service_2024.pdf',
+    filename: 'guideline_france.pdf',
     uploadDate: '2024-01-15T10:30:00Z',
     status: 'metadata_validated',
-    content: 'Contrat de prestation de services informatiques entre la société Alpha et la société Beta. Article 1: Objet du contrat. Le présent contrat a pour objet la fourniture de services de développement logiciel...',
+    content: 'Multivariate analysis revealed that septic shock and bacteremia originating from lower respiratory tract infection were two independent risk factors for 30-day mortality.',
     metadata: {
-      title: 'Contrat de prestation de services informatiques',
-      author: 'Service juridique Alpha',
-      category: 'Contrat commercial',
-      tags: ['informatique', 'prestation', 'développement'],
+      title: 'Guideline France',
+      author: 'Service médical',
+      category: 'Guideline',
+      tags: ['pharmaceutique', 'guideline', 'médical'],
       extractionConfidence: 0.92,
       validatedBy: 'Marie Dubois',
       validatedAt: '2024-01-15T14:20:00Z',
@@ -27,9 +27,9 @@ export const mockDocuments: Document[] = [
     annotations: [
       {
         id: 'ann-001',
-        text: 'services de développement logiciel',
-        start: 180,
-        end: 215,
+        text: 'septic shock',
+        start: 50,
+        end: 62,
         type: 'concept',
         confidence: 0.88,
         aiGenerated: true,
@@ -44,7 +44,7 @@ export const mockDocuments: Document[] = [
         userId: 'system',
         userName: 'Système',
         timestamp: '2024-01-15T10:30:00Z',
-        details: 'Fichier contrat_service_2024.pdf uploadé'
+        details: 'Fichier guideline_france.pdf uploadé'
       },
       {
         id: 'audit-002',
@@ -69,7 +69,7 @@ export const mockDocuments: Document[] = [
     filename: 'rapport_technique_q1.docx',
     uploadDate: '2024-01-16T09:15:00Z',
     status: 'annotated',
-    content: 'Rapport technique trimestriel Q1 2024. Synthèse des développements réalisés et des performances système...',
+    content: 'Contrat de prestation de services informatiques entre la société Alpha et la société Beta. Article 1: Objet du contrat. Le présent contrat a pour objet la fourniture de services de développement logiciel et de maintenance des systèmes informatiques.',
     metadata: {
       title: 'Rapport technique Q1 2024',
       author: 'Équipe technique',
@@ -83,9 +83,9 @@ export const mockDocuments: Document[] = [
     annotations: [
       {
         id: 'ann-002',
-        text: 'performances système',
+        text: 'services de développement logiciel',
         start: 120,
-        end: 140,
+        end: 152,
         type: 'concept',
         confidence: 0.91,
         aiGenerated: true,
@@ -101,6 +101,50 @@ export const mockDocuments: Document[] = [
         userName: 'Système',
         timestamp: '2024-01-16T09:15:00Z',
         details: 'Fichier rapport_technique_q1.docx uploadé'
+      }
+    ]
+  },
+  {
+    id: 'doc-003',
+    filename: 'pcr_image_resultat_30279.png',
+    uploadDate: '2024-01-17T14:20:00Z',
+    status: 'metadata_validated',
+    content: '/lovable-uploads/3d426342-1c24-4b53-aba1-92fd3fb69284.png',
+    metadata: {
+      title: 'PCR Image resultat 30279',
+      author: 'Laboratoire biologie',
+      category: 'Image',
+      tags: ['biologie', 'PCR', 'analyse'],
+      extractionConfidence: 0.89,
+      validatedBy: 'Marie Dubois',
+      validatedAt: '2024-01-17T15:10:00Z',
+      extractedAt: '2024-01-17T14:25:00Z'
+    },
+    annotations: [],
+    auditTrail: [
+      {
+        id: 'audit-005',
+        action: 'Document uploadé',
+        userId: 'system',
+        userName: 'Système',
+        timestamp: '2024-01-17T14:20:00Z',
+        details: 'Fichier pcr_image_resultat_30279.png uploadé'
+      },
+      {
+        id: 'audit-006',
+        action: 'Métadonnées extraites',
+        userId: 'system',
+        userName: 'IA Extraction',
+        timestamp: '2024-01-17T14:25:00Z',
+        details: 'Extraction automatique des métadonnées (confiance: 89%)'
+      },
+      {
+        id: 'audit-007',
+        action: 'Métadonnées validées',
+        userId: '1',
+        userName: 'Marie Dubois',
+        timestamp: '2024-01-17T15:10:00Z',
+        details: 'Validation des métadonnées par le métadonneur'
       }
     ]
   }

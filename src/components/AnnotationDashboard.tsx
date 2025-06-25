@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Document } from '../types';
@@ -22,10 +23,12 @@ const AnnotationDashboard: React.FC<AnnotationDashboardProps> = ({ documents, cu
 
   const getContextBadge = (category: string) => {
     switch (category) {
-      case 'Contrat commercial':
+      case 'Guideline':
         return <Badge className="bg-cyan-100 text-cyan-800">Pharmaceutique</Badge>;
       case 'Rapport interne':
         return <Badge className="bg-purple-100 text-purple-800">Technique</Badge>;
+      case 'Image':
+        return <Badge className="bg-green-100 text-green-800">Biologie</Badge>;
       default:
         return <Badge className="bg-gray-100 text-gray-800">Général</Badge>;
     }
