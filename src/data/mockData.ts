@@ -1,10 +1,9 @@
-
 import { Document, User, AuditEntry } from '../types';
 
 export const mockUsers: User[] = [
   { id: '1', name: 'Marie Dubois', email: 'marie@company.com', role: 'metadonneur' },
   { id: '2', name: 'Jean Martin', email: 'jean@company.com', role: 'annotateur' },
-  { id: '3', name: 'Dr. Sophie Lambert', email: 'sophie@company.com', role: 'expert' }
+  { id: '3', name: 'Dr. Sophie Lambert - Clinical regulatory', email: 'sophie@company.com', role: 'expert' }
 ];
 
 export const mockDocuments: Document[] = [

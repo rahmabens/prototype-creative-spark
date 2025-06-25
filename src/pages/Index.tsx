@@ -8,6 +8,7 @@ import Dashboard from '../components/Dashboard';
 import AuditTrail from '../components/AuditTrail';
 import MetadataValidation from '../components/MetadataValidation';
 import AnnotationDashboard from '../components/AnnotationDashboard';
+import ExpertDashboard from '../components/ExpertDashboard';
 
 const Index = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -38,12 +39,7 @@ const Index = () => {
       case 'annotation':
         return <AnnotationDashboard documents={mockDocuments} currentUser={currentUser} />;
       case 'validation':
-        return (
-          <div className="text-center py-8">
-            <h2 className="text-xl font-semibold mb-4">Module de validation finale</h2>
-            <p className="text-gray-600">Interface spécialisée pour les experts métier - En développement</p>
-          </div>
-        );
+        return <ExpertDashboard documents={mockDocuments} currentUser={currentUser} />;
       default:
         return <Dashboard documents={mockDocuments} currentUser={currentUser} />;
     }
