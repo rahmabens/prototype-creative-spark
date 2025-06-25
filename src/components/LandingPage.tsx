@@ -90,6 +90,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="votre@email.com"
                         required
+                        className="transition-all duration-200 focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
                     
@@ -102,26 +103,32 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••"
                         required
+                        className="transition-all duration-200 focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
 
                     {error && (
-                      <div className="text-red-600 text-sm">{error}</div>
+                      <div className="text-red-600 text-sm bg-red-50 p-3 rounded-md border border-red-200">
+                        {error}
+                      </div>
                     )}
 
-                    <Button type="submit" className="w-full">
-                      Se connecter
+                    <Button 
+                      type="submit" 
+                      className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium py-3 px-4 rounded-md transition-all duration-200 transform hover:scale-105 hover:shadow-lg focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    >
+                      Se connecter →
                     </Button>
                   </form>
 
-                  <div className="mt-6 text-sm text-gray-500">
-                    <p className="font-semibold mb-2">Comptes de démonstration :</p>
+                  <div className="mt-6 text-sm text-gray-500 bg-gray-50 p-4 rounded-md">
+                    <p className="font-semibold mb-2 text-gray-700">Comptes de démonstration :</p>
                     <div className="space-y-1">
                       <p>• marie@company.com (Métadonneur)</p>
                       <p>• jean@company.com (Annotateur)</p>
                       <p>• sophie@company.com (Expert métier)</p>
                     </div>
-                    <p className="mt-2 text-xs">Mot de passe : password123</p>
+                    <p className="mt-2 text-xs text-gray-400">Mot de passe : password123</p>
                   </div>
                 </CardContent>
               </Card>
