@@ -6,7 +6,7 @@ import { mockDocuments } from '../data/mockData';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
-import { ArrowLeft, User, Clock } from 'lucide-react';
+import { ArrowLeft, User, Clock, Plus, X, Check } from 'lucide-react';
 
 const AnnotationPage = () => {
   const navigate = useNavigate();
@@ -37,6 +37,13 @@ const AnnotationPage = () => {
       new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
     );
   };
+
+  const entityTypes = [
+    { name: 'FACTOR', color: 'bg-blue-500 text-white', label: 'Facteur' },
+    { name: 'CONDITION', color: 'bg-orange-400 text-white', label: 'Condition' },
+    { name: 'METHOD', color: 'bg-purple-500 text-white', label: 'Méthode' },
+    { name: 'EFFECT', color: 'bg-green-500 text-white', label: 'Effet' }
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -71,8 +78,11 @@ const AnnotationPage = () => {
               <CardTitle className="flex items-center justify-between">
                 <span>{document.metadata.title || document.filename}</span>
                 <div className="flex space-x-2">
+                  <Badge className="bg-cyan-100 text-cyan-800">
+                    Pharmaceutique
+                  </Badge>
                   <Badge className="bg-blue-100 text-blue-800">
-                    {document.metadata.category || 'Non défini'}
+                    Medical Document
                   </Badge>
                   <Badge variant="outline">
                     ID: {document.id.split('-')[1]}
@@ -121,35 +131,25 @@ const AnnotationPage = () => {
                   <div className="bg-white p-6 border rounded-lg max-h-96 overflow-y-auto">
                     <div className="space-y-4 text-sm leading-relaxed">
                       <p>
-                        Contrat entre{' '}
-                        <span className="bg-yellow-200 px-1 rounded cursor-pointer hover:bg-yellow-300" title="Entité: Société">
-                          Alpha Corporation
+                        Multivariate analysis revealed that{' '}
+                        <span className="bg-orange-400 text-white px-1 rounded cursor-pointer hover:opacity-80" title="CONDITION">
+                          septic shock
                         </span>
-                        {' '}et la société{' '}
-                        <span className="bg-green-200 px-1 rounded cursor-pointer hover:bg-green-300" title="Entité: Société">
-                          Beta Industries
+                        {' '}and{' '}
+                        <span className="bg-orange-400 text-white px-1 rounded cursor-pointer hover:opacity-80" title="CONDITION">
+                          bacteremia
                         </span>
-                        .
-                      </p>
-                      <p>
-                        <strong>Article 1: Objet du contrat.</strong> Le présent contrat a pour objet la fourniture de{' '}
-                        <span className="bg-blue-200 px-1 rounded cursor-pointer hover:bg-blue-300" title="Concept: Service">
-                          services de développement logiciel
+                        {' '}originating from{' '}
+                        <span className="bg-orange-400 text-white px-1 rounded cursor-pointer hover:opacity-80" title="CONDITION">
+                          lower respiratory tract infection
                         </span>
-                        {' '}pour une durée de{' '}
-                        <span className="bg-purple-200 px-1 rounded cursor-pointer hover:bg-purple-300" title="Durée: Temporelle">
-                          24 mois
+                        {' '}were two independent{' '}
+                        <span className="bg-blue-500 text-white px-1 rounded cursor-pointer hover:opacity-80" title="FACTOR">
+                          risk factors
                         </span>
-                        .
-                      </p>
-                      <p>
-                        Le montant total du contrat s'élève à{' '}
-                        <span className="bg-red-200 px-1 rounded cursor-pointer hover:bg-red-300" title="Montant: Financier">
-                          500 000 euros
-                        </span>
-                        {' '}payable en{' '}
-                        <span className="bg-orange-200 px-1 rounded cursor-pointer hover:bg-orange-300" title="Modalité: Paiement">
-                          versements mensuels
+                        {' '}for{' '}
+                        <span className="bg-green-500 text-white px-1 rounded cursor-pointer hover:opacity-80" title="EFFECT">
+                          30-day mortality
                         </span>
                         .
                       </p>
@@ -162,42 +162,48 @@ const AnnotationPage = () => {
                   <h3 className="font-semibold text-lg">Outils d'annotation</h3>
                   <div className="bg-gray-50 p-4 rounded-lg space-y-4">
                     <div>
-                      <h4 className="font-medium mb-2">Types d'entités</h4>
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="font-medium">Types d'entités</h4>
+                        <Button variant="outline" size="sm" className="text-blue-600 hover:bg-blue-50">
+                          <Plus className="w-3 h-3 mr-1" />
+                          Ajouter entité
+                        </Button>
+                      </div>
                       <div className="grid grid-cols-2 gap-2">
-                        <button className="p-2 bg-yellow-200 text-yellow-800 rounded text-sm hover:bg-yellow-300">
-                          Société
-                        </button>
-                        <button className="p-2 bg-green-200 text-green-800 rounded text-sm hover:bg-green-300">
-                          Organisation
-                        </button>
-                        <button className="p-2 bg-blue-200 text-blue-800 rounded text-sm hover:bg-blue-300">
-                          Service
-                        </button>
-                        <button className="p-2 bg-purple-200 text-purple-800 rounded text-sm hover:bg-purple-300">
-                          Durée
-                        </button>
-                        <button className="p-2 bg-red-200 text-red-800 rounded text-sm hover:bg-red-300">
-                          Montant
-                        </button>
-                        <button className="p-2 bg-orange-200 text-orange-800 rounded text-sm hover:bg-orange-300">
-                          Modalité
-                        </button>
+                        {entityTypes.map((type) => (
+                          <button 
+                            key={type.name}
+                            className={`p-2 ${type.color} rounded text-sm hover:opacity-80 transition-opacity`}
+                          >
+                            {type.label}
+                          </button>
+                        ))}
                       </div>
                     </div>
 
                     <div>
-                      <h4 className="font-medium mb-2">Annotations détectées</h4>
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="font-medium">Annotations détectées</h4>
+                        <Button variant="outline" size="sm" className="text-green-600 hover:bg-green-50">
+                          <Plus className="w-3 h-3 mr-1" />
+                          Ajouter annotation
+                        </Button>
+                      </div>
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between items-center p-2 bg-white rounded border">
-                          <span>"Alpha Corporation" → Société</span>
+                          <span>"septic shock" → CONDITION</span>
                           <span className="text-green-600">✓ Validé</span>
                         </div>
                         <div className="flex justify-between items-center p-2 bg-white rounded border">
-                          <span>"Beta Industries" → Société</span>
+                          <span>"bacteremia" → CONDITION</span>
                           <span className="text-yellow-600">⚠ À valider</span>
                         </div>
                         <div className="flex justify-between items-center p-2 bg-white rounded border">
-                          <span>"500 000 euros" → Montant</span>
+                          <span>"risk factors" → FACTOR</span>
+                          <span className="text-green-600">✓ Validé</span>
+                        </div>
+                        <div className="flex justify-between items-center p-2 bg-white rounded border">
+                          <span>"30-day mortality" → EFFECT</span>
                           <span className="text-green-600">✓ Validé</span>
                         </div>
                       </div>
@@ -205,7 +211,12 @@ const AnnotationPage = () => {
 
                     <div className="flex gap-2 pt-4">
                       <Button size="sm" className="bg-green-600 hover:bg-green-700">
+                        <Check className="w-3 h-3 mr-1" />
                         Valider les annotations
+                      </Button>
+                      <Button size="sm" variant="destructive">
+                        <X className="w-3 h-3 mr-1" />
+                        Refuser annotation
                       </Button>
                       <Button size="sm" variant="outline">
                         Exporter
