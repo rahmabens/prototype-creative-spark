@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
-import { Eye, Clock, FileText } from 'lucide-react';
+import { Eye, FileText } from 'lucide-react';
 
 interface AnnotationDashboardProps {
   documents: Document[];
@@ -18,17 +18,6 @@ const AnnotationDashboard: React.FC<AnnotationDashboardProps> = ({ documents, cu
   const annotationDocs = documents.filter(doc => 
     doc.status === 'metadata_validated' || doc.status === 'annotated'
   );
-
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'metadata_validated':
-        return <Badge className="bg-green-100 text-green-800">✓ Réussi</Badge>;
-      case 'annotated':
-        return <Badge className="bg-blue-100 text-blue-800">En cours</Badge>;
-      default:
-        return <Badge variant="outline">{status}</Badge>;
-    }
-  };
 
   const getContextBadge = (category: string) => {
     switch (category) {
@@ -55,13 +44,10 @@ const AnnotationDashboard: React.FC<AnnotationDashboardProps> = ({ documents, cu
     );
   };
 
-  const formatExtractionTime = (date: string) => {
-    const extractionDate = new Date(date);
-    const now = new Date();
-    const diffHours = Math.floor((now.getTime() - extractionDate.getTime()) / (1000 * 60 * 60));
-    const diffMinutes = Math.floor(((now.getTime() - extractionDate.getTime()) % (1000 * 60 * 60)) / (1000 * 60));
-    
-    return `${diffHours} hours, ${diffMinutes} minutes ago`;
+  const handleViewDocument = (doc: Document) => {
+    setSelectedDoc(doc);
+    // Simuler l'ouverture du document avec annotations type Prodigy/spaCy
+    console.log('Ouverture du document pour annotation:', doc);
   };
 
   return (
@@ -81,12 +67,9 @@ const AnnotationDashboard: React.FC<AnnotationDashboardProps> = ({ documents, cu
               <TableHeader>
                 <TableRow>
                   <TableHead>Document</TableHead>
-                  <TableHead>Date d'extraction</TableHead>
-                  <TableHead>Statut</TableHead>
+                  <TableHead>Type de document</TableHead>
                   <TableHead>Contexte</TableHead>
                   <TableHead>Type de fichier</TableHead>
-                  <TableHead>Métadonnées extraites</TableHead>
-                  <TableHead>Temps</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -105,16 +88,9 @@ const AnnotationDashboard: React.FC<AnnotationDashboardProps> = ({ documents, cu
                     </TableCell>
                     
                     <TableCell>
-                      <div className="text-sm">
-                        {new Date(doc.metadata.extractedAt).toLocaleDateString('fr-FR')} {new Date(doc.metadata.extractedAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        {formatExtractionTime(doc.metadata.extractedAt)}
-                      </div>
-                    </TableCell>
-                    
-                    <TableCell>
-                      {getStatusBadge(doc.status)}
+                      <Badge className="bg-blue-100 text-blue-800">
+                        {doc.metadata.category || 'Non défini'}
+                      </Badge>
                     </TableCell>
                     
                     <TableCell>
@@ -126,45 +102,13 @@ const AnnotationDashboard: React.FC<AnnotationDashboardProps> = ({ documents, cu
                     </TableCell>
                     
                     <TableCell>
-                      <div className="space-y-1">
-                        {doc.metadata.title && (
-                          <div className="flex items-center space-x-1">
-                            <Badge className="bg-blue-100 text-blue-800 text-xs">
-                              📝 {doc.metadata.title.substring(0, 20)}... ({Math.round(doc.metadata.extractionConfidence * 100)}%)
-                            </Badge>
-                          </div>
-                        )}
-                        {doc.metadata.extractedAt && (
-                          <div className="flex items-center space-x-1">
-                            <Badge className="bg-green-100 text-green-800 text-xs">
-                              📅 {new Date(doc.metadata.extractedAt).toLocaleDateString('fr-FR')} (100%)
-                            </Badge>
-                          </div>
-                        )}
-                        {doc.metadata.tags && (
-                          <div className="flex items-center space-x-1">
-                            <Badge className="bg-cyan-100 text-cyan-800 text-xs">
-                              🏷️ {doc.metadata.tags[0]} (90%)
-                            </Badge>
-                          </div>
-                        )}
-                        {doc.metadata.author && (
-                          <div className="flex items-center space-x-1">
-                            <Badge className="bg-orange-100 text-orange-800 text-xs">
-                              👤 {doc.metadata.author} (95%)
-                            </Badge>
-                          </div>
-                        )}
-                      </div>
-                    </TableCell>
-                    
-                    <TableCell>
-                      <div className="text-sm font-medium">1.33s</div>
-                    </TableCell>
-                    
-                    <TableCell>
-                      <Button variant="outline" size="sm">
-                        <Eye className="w-4 h-4" />
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => handleViewDocument(doc)}
+                      >
+                        <Eye className="w-4 h-4 mr-2" />
+                        Annoter
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -174,6 +118,47 @@ const AnnotationDashboard: React.FC<AnnotationDashboardProps> = ({ documents, cu
           )}
         </CardContent>
       </Card>
+
+      {/* Simulation d'interface d'annotation type Prodigy/spaCy */}
+      {selectedDoc && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Annotation du document: {selectedDoc.metadata.title}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold mb-4">Document à l'état brut avec annotations suggérées:</h3>
+              <div className="bg-white p-4 border rounded space-y-4">
+                <div className="text-sm">
+                  <span className="bg-yellow-200 px-1 rounded" title="Entité: Société">
+                    {selectedDoc.content.includes('Alpha') ? 'Alpha' : 'Société Alpha'}
+                  </span>
+                  {' '}et la société{' '}
+                  <span className="bg-green-200 px-1 rounded" title="Entité: Société">
+                    Beta
+                  </span>
+                  . Article 1: Objet du contrat. Le présent contrat a pour objet la fourniture de{' '}
+                  <span className="bg-blue-200 px-1 rounded" title="Concept: Service">
+                    services de développement logiciel
+                  </span>
+                  ...
+                </div>
+                <div className="flex gap-2 mt-4">
+                  <Button size="sm" className="bg-green-600 hover:bg-green-700">
+                    Valider les annotations
+                  </Button>
+                  <Button size="sm" variant="outline">
+                    Modifier
+                  </Button>
+                  <Button size="sm" variant="outline" onClick={() => setSelectedDoc(null)}>
+                    Fermer
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };

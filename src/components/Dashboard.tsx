@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Document, User } from '../types';
 import { Card } from './ui/card';
@@ -39,7 +38,7 @@ const Dashboard: React.FC<DashboardProps> = ({ documents, currentUser }) => {
     {
       name: 'Documents',
       'Planifiés': stats.totalPlanned,
-      'Scrappés': stats.totalScrapped,
+      [currentUser.role === 'annotateur' ? 'À annoter' : 'Scrappés']: stats.totalScrapped,
       'Terminés': stats.completed,
       'En cours': stats.inProgress
     }
@@ -63,7 +62,9 @@ const Dashboard: React.FC<DashboardProps> = ({ documents, currentUser }) => {
           <div className="flex items-center">
             <FileText className="h-8 w-8 text-blue-600" />
             <div className="ml-4">
-              <p className="text-sm font-medium text-blue-800">Documents Scrappés / Planifiés</p>
+              <p className="text-sm font-medium text-blue-800">
+                Documents {currentUser.role === 'annotateur' ? 'À annoter' : 'Scrappés'} / Planifiés
+              </p>
               <p className="text-2xl font-bold text-blue-900">
                 {stats.totalScrapped} / {stats.totalPlanned}
               </p>
@@ -161,7 +162,7 @@ const Dashboard: React.FC<DashboardProps> = ({ documents, currentUser }) => {
                   }}
                 />
                 <Bar dataKey="Planifiés" fill="#F1F5F9" name="Planifiés" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="Scrappés" fill="#2196F3" name="Scrappés" radius={[4, 4, 0, 0]} />
+                <Bar dataKey={currentUser.role === 'annotateur' ? 'À annoter' : 'Scrappés'} fill="#2196F3" name={currentUser.role === 'annotateur' ? 'À annoter' : 'Scrappés'} radius={[4, 4, 0, 0]} />
                 <Bar dataKey="Terminés" fill="#9C27B0" name="Terminés" radius={[4, 4, 0, 0]} />
                 <Bar dataKey="En cours" fill="#E91E63" name="En cours" radius={[4, 4, 0, 0]} />
               </BarChart>
@@ -180,7 +181,13 @@ const Dashboard: React.FC<DashboardProps> = ({ documents, currentUser }) => {
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={taskData}
+                  data={[
+                    { name: 'Extraction', value: 15, color: '#E91E63' },
+                    { name: 'Validation', value: 8, color: '#9C27B0' },
+                    { name: 'Annotation', value: 12, color: '#2196F3' },
+                    { name: 'Correction', value: 5, color: '#FF6B35' },
+                    { name: 'Finalisation', value: 3, color: '#00BCD4' }
+                  ]}
                   cx="50%"
                   cy="50%"
                   labelLine={false}
@@ -191,8 +198,8 @@ const Dashboard: React.FC<DashboardProps> = ({ documents, currentUser }) => {
                   stroke="#FFFFFF"
                   strokeWidth={3}
                 >
-                  {taskData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={TASK_COLORS[index % TASK_COLORS.length]} />
+                  {['#E91E63', '#9C27B0', '#2196F3', '#FF6B35', '#00BCD4'].map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry} />
                   ))}
                 </Pie>
                 <Tooltip 
