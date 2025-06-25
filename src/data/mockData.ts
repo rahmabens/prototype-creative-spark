@@ -109,7 +109,7 @@ export const mockDocuments: Document[] = [
     filename: 'pcr_image_resultat_30279.png',
     uploadDate: '2024-01-17T14:20:00Z',
     status: 'metadata_validated',
-    content: '/lovable-uploads/cfbdebf7-0c7e-4ec4-92d1-5418e44537d2.png',
+    content: '/lovable-uploads/a54bb68a-848e-4db0-83d2-6b378530f99b.png',
     metadata: {
       title: 'PCR Image resultat 30279',
       author: 'Laboratoire biologie',
