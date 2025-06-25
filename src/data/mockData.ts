@@ -69,7 +69,7 @@ export const mockDocuments: Document[] = [
     filename: 'rapport_technique_q1.docx',
     uploadDate: '2024-01-16T09:15:00Z',
     status: 'annotated',
-    content: 'Contrat de prestation de services informatiques entre la société Alpha et la société Beta. Article 1: Objet du contrat. Le présent contrat a pour objet la fourniture de services de développement logiciel et de maintenance des systèmes informatiques.',
+    content: 'Rapport technique Q1 2024 - Performance des services informatiques. Notre équipe technique a analysé les performances des différents services déployés au premier trimestre. Les services web ont montré une amélioration de 15% en termes de temps de réponse. Les bases de données ont été optimisées pour supporter une charge accrue. Les serveurs cloud ont été mis à jour avec les dernières technologies. L\'infrastructure réseau a été renforcée pour améliorer la sécurité et la disponibilité des services.',
     metadata: {
       title: 'Rapport technique Q1 2024',
       author: 'Équipe technique',
@@ -83,9 +83,9 @@ export const mockDocuments: Document[] = [
     annotations: [
       {
         id: 'ann-002',
-        text: 'services de développement logiciel',
-        start: 120,
-        end: 152,
+        text: 'services informatiques',
+        start: 45,
+        end: 67,
         type: 'concept',
         confidence: 0.91,
         aiGenerated: true,
@@ -109,7 +109,7 @@ export const mockDocuments: Document[] = [
     filename: 'pcr_image_resultat_30279.png',
     uploadDate: '2024-01-17T14:20:00Z',
     status: 'metadata_validated',
-    content: '/lovable-uploads/3d426342-1c24-4b53-aba1-92fd3fb69284.png',
+    content: '/lovable-uploads/38bd1e00-3e4b-4f94-9871-4d368d6f3833.png',
     metadata: {
       title: 'PCR Image resultat 30279',
       author: 'Laboratoire biologie',
