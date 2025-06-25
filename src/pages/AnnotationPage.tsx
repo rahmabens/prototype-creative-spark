@@ -72,6 +72,74 @@ const AnnotationPage = () => {
 
       <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div className="space-y-6">
+          {/* Documents examples */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Exemples de documents par contexte</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Document 1 - Pharmaceutique */}
+                <div className="border rounded-lg p-4 bg-white">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="font-medium text-sm">Document 1</span>
+                    <div className="flex space-x-2">
+                      <Badge className="bg-cyan-100 text-cyan-800 text-xs">
+                        Pharmaceutique
+                      </Badge>
+                      <Badge className="bg-blue-100 text-blue-800 text-xs">
+                        Medical Document
+                      </Badge>
+                    </div>
+                  </div>
+                  <div className="bg-gray-50 p-3 rounded text-xs">
+                    <p>Multivariate analysis revealed that septic shock and bacteremia...</p>
+                  </div>
+                </div>
+
+                {/* Document 2 - Technique */}
+                <div className="border rounded-lg p-4 bg-white">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="font-medium text-sm">Document 2</span>
+                    <div className="flex space-x-2">
+                      <Badge className="bg-purple-100 text-purple-800 text-xs">
+                        Technique
+                      </Badge>
+                      <Badge className="bg-blue-100 text-blue-800 text-xs">
+                        Contrat
+                      </Badge>
+                    </div>
+                  </div>
+                  <div className="bg-gray-50 p-3 rounded text-xs">
+                    <p>Contrat de prestation de services informatiques entre la société Alpha et la société Beta...</p>
+                  </div>
+                </div>
+
+                {/* Document 3 - Biology */}
+                <div className="border rounded-lg p-4 bg-white">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="font-medium text-sm">Document 3</span>
+                    <div className="flex space-x-2">
+                      <Badge className="bg-green-100 text-green-800 text-xs">
+                        Biology
+                      </Badge>
+                      <Badge className="bg-blue-100 text-blue-800 text-xs">
+                        Image
+                      </Badge>
+                    </div>
+                  </div>
+                  <div className="bg-gray-50 p-3 rounded">
+                    <img 
+                      src="/lovable-uploads/fb6c4759-0bc9-40f0-a228-a8799d7666ee.png" 
+                      alt="Biology sample"
+                      className="w-full h-20 object-cover rounded"
+                    />
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Informations du document */}
           <Card>
             <CardHeader>
